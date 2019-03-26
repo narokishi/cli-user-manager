@@ -50,9 +50,7 @@ final class Stopwatch
      */
     public function getResult()
     {
-        if (!$this->startsAt instanceof \DateTime
-            || !$this->endsAt instanceof \DateTime
-        ) {
+        if (!$this->endsAt instanceof \DateTime) {
             throw new \LogicException(
                 "You can't get result of non-recorded lap"
             );

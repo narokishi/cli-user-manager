@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Src\DependencyInjection;
 
+use Src\Domain\Common\ParameterBag\FrozenParameterBag;
 use Src\Domain\Common\ParameterBag\ParameterBag;
 
 /**
@@ -17,7 +18,7 @@ final class Container
     protected $services;
 
     /**
-     * @var ParameterBag
+     * @var FrozenParameterBag
      */
     protected $registeredServices;
 
@@ -27,7 +28,7 @@ final class Container
     public function __construct()
     {
         $this->services = new ParameterBag;
-        $this->registeredServices = new ParameterBag;
+        $this->registeredServices = new FrozenParameterBag;
     }
 
     /**

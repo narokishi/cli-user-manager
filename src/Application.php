@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace Src;
 
-use Src\Command\InjectableInterface;
 use Src\DependencyInjection\Container;
+use Src\DependencyInjection\InjectableInterface;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -31,7 +31,7 @@ final class Application extends BaseApplication
 
     /**
      * @param Container $container
-     * @return $container
+     * @return $this
      */
     public function setContainer(Container $container)
     {
