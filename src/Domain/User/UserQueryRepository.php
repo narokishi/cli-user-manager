@@ -40,4 +40,34 @@ SQL;
 
         return $parameterBag->freeze();
     }
+
+    /**
+     * @param string $email
+     * @return UserDTO|null
+     */
+    public function getUserByEmail(string $email)
+    {
+        $sqlStatement = <<<SQL
+          SELECT
+            id,
+            email,
+            name,
+            created_at,
+            updated_at
+          FROM
+            users
+          WHERE
+            email = :email
+          LIMIT
+            1
+SQL;
+
+        $query = $this->db->prepare($sqlStatement);
+        $query->execute([
+            'email' => $email,
+        ]);
+
+        return !empty($user = $query->fetch())
+            ? UserDTO::createFromArray($user) : null;
+    }
 }

@@ -3,19 +3,24 @@ declare(strict_types = 1);
 
 namespace Src\Command\User;
 
+use Src\DependencyInjection\InjectableInterface;
+use Src\DependencyInjection\InjectableTrait;
+use Src\Domain\User\UserService;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class GetCommand
  * @package Src\Command
  */
-final class GetCommand extends Command
+final class GetCommand extends Command implements InjectableInterface
 {
+    use InjectableTrait;
+
     /**
      * @var string
      */
@@ -38,6 +43,20 @@ final class GetCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var UserService $userService */
+        $userService = $this->container->getService(UserService::class);
+        $user = $userService->getUserByEmail($input->getArgument('email'));
+
+        $table = (new Table($output))
+            ->setHeaderTitle('Użytkownik')
+            ->setFooterTitle('')
+            ->setHeaders(['Id', 'Email', 'Imię', 'Data utworzenia', 'Data modyfikacji'])
+            ->setRows([
+                $user->toArray(),
+            ]);
+
+        $table->render();
+
         return 0;
     }
 

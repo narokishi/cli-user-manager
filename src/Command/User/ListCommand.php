@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace Src\Command\User;
 
-use Src\Command\InjectableInterface;
-use Src\Command\InjectableTrait;
+use Src\DependencyInjection\InjectableInterface;
+use Src\DependencyInjection\InjectableTrait;
 use Src\Domain\User\DTO\UserDTO;
 use Src\Domain\User\UserService;
 use Symfony\Component\Console\Command\Command;

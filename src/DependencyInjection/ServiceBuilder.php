@@ -10,39 +10,16 @@ namespace Src\DependencyInjection;
 final class ServiceBuilder
 {
     /**
-     * @param string $serviceClass
-     * @return bool
-     */
-    public static function isValidService(string $serviceClass): bool
-    {
-        return is_subclass_of($serviceClass, ServiceSubscriberInterface::class);
-    }
-
-    /**
      * Buduje klasę serwisu w kontenerze.
      *
      * @param string $serviceClass
      * @param Container $serviceContainer
      * @return mixed
      */
-    public static function buildService(string $serviceClass, Container $serviceContainer): ServiceSubscriberInterface
+    public static function buildService(string $serviceClass, Container $serviceContainer)
     {
-        if (!self::isValidService($serviceClass)) {
-            throw new RegisterServiceException($serviceClass);
-        }
+        $service = $serviceContainer->getRegisteredService($serviceClass)($serviceContainer);
 
-        $dependencies = [];
-
-        /** @var ServiceSubscriberInterface $serviceClass */
-        foreach ($serviceClass::getSubscribedServices() as $dependency) {
-            if (!self::isValidService($dependency)) {
-                throw new RegisterServiceException($dependency);
-            }
-
-            $dependencies[] = $serviceContainer->getService($dependency);
-        }
-
-        $service = new $serviceClass(...$dependencies);
         $serviceContainer->addService($serviceClass, $service);
 
         return $service;

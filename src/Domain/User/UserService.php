@@ -3,16 +3,14 @@ declare(strict_types = 1);
 
 namespace Src\Domain\User;
 
-use Src\DependencyInjection\ServiceSubscriberInterface;
 use Src\Domain\Common\ParameterBag\FrozenParameterBag;
-use Src\PDO;
 
 /**
  * Class UserService
  *
  * @package Src\Domain\User
  */
-final class UserService implements ServiceSubscriberInterface
+final class UserService
 {
     /**
      * @var UserQueryRepository
@@ -44,12 +42,11 @@ final class UserService implements ServiceSubscriberInterface
     }
 
     /**
-     * @return array
+     * @param string $email
+     * @return DTO\UserDTO|null
      */
-    public static function getSubscribedServices(): array
+    public function getUserByEmail(string $email)
     {
-        return [
-            PDO::class,
-        ];
+        return $this->queryRepository->getUserByEmail($email);
     }
 }

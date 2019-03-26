@@ -2,21 +2,33 @@
 <?php
 declare(strict_types = 1);
 
+use Src\DependencyInjection\Container;
+
 require __DIR__.'/vendor/autoload.php';
 
-$container = new Src\DependencyInjection\Container;
-$container->addService(
-    Src\PDO::class,
-    (new Src\Database)
-        ->setEnvironment(new Src\Env)
-        ->getConnection()
-);
+$stopwatch = new \Test\Stopwatch;
+$stopwatch->start();
 
-$container->registerService(Src\Domain\User\UserService::class);
+$container = new Container;
+$container->registerService(\PDO::class, function () {
+    return (new Src\Database)
+        ->setEnvironment(new Src\Env)
+        ->getConnection();
+});
+
+$container->registerService(Src\Domain\User\UserService::class, function (Container $container) {
+    return new Src\Domain\User\UserService(
+        $container->getService(\PDO::class)
+    );
+});
 
 $application = (new Src\Application)
     ->setDefaultDefinition()
     ->setContainer($container)
     ->registerCommands();
 
+$application->setAutoExit(false);
 $application->run(new Src\ArgvInput());
+
+$stopwatch->stop();
+echo "Czas wykonania: {$stopwatch->getResult()} sekund";

@@ -28,8 +28,8 @@ final class Connection
         string $database,
         string $user,
         string $password
-    ): PDO {
-        return new PDO(
+    ): \PDO {
+        return new \PDO(
             sprintf(
                 self::PGSQL_PATTERN,
                 $host,

@@ -1,8 +1,6 @@
 <?php
 
-namespace Src\Command;
-
-use Src\DependencyInjection\Container;
+namespace Src\DependencyInjection;
 
 /**
  * Interface InjectableInterface

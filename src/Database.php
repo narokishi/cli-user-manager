@@ -26,9 +26,9 @@ final class Database
     }
 
     /**
-     * @return PDO
+     * @return \PDO
      */
-    public function getConnection(): PDO
+    public function getConnection(): \PDO
     {
         return Connection::get(
             $this->env->get('dbHost'),

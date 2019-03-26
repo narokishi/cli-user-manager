@@ -36,7 +36,6 @@ final class Container
      */
     public function addService(string $serviceClass, $service)
     {
-        $this->registeredServices->set($serviceClass, $serviceClass);
         $this->services->set($serviceClass, $service);
     }
 
@@ -44,15 +43,12 @@ final class Container
      * Rejestracja nowego serwisu.
      *
      * @param string $serviceClass
+     * @param callable $definition
      * @param bool $lazyLoad
      */
-    public function registerService(string $serviceClass, $lazyLoad = true)
+    public function registerService(string $serviceClass, callable $definition, $lazyLoad = true)
     {
-        if (!ServiceBuilder::isValidService($serviceClass)) {
-            throw new RegisterServiceException($serviceClass);
-        }
-
-        $this->registeredServices->set($serviceClass, $serviceClass);
+        $this->registeredServices->set($serviceClass, $definition);
 
         if (!$lazyLoad && !$this->services->has($serviceClass)) {
             ServiceBuilder::buildService($serviceClass, $this);
@@ -61,9 +57,9 @@ final class Container
 
     /**
      * @param string $serviceClass
-     * @return ServiceSubscriberInterface
+     * @return mixed
      */
-    public function getService(string $serviceClass): ServiceSubscriberInterface
+    public function getService(string $serviceClass)
     {
         if ($this->services->has($serviceClass)) {
             return $this->services->get($serviceClass);
@@ -73,10 +69,24 @@ final class Container
     }
 
     /**
+     * @debug Metoda do sprawdzenia załadowanych serwisów w ramach requestu.
      * @return array
      */
     public function getBootedServices(): array
     {
         return $this->services->all();
+    }
+
+    /**
+     * @param string $serviceClass
+     * @return mixed
+     */
+    public function getRegisteredService(string $serviceClass)
+    {
+        if (!$this->registeredServices->has($serviceClass)) {
+            throw new RegisterServiceException($serviceClass);
+        }
+
+        return $this->registeredServices->get($serviceClass);
     }
 }
