@@ -1,0 +1,22 @@
+{
+    "name": "narokishi/cli-user-manager",
+    "type": "project",
+    "description": "Application to manage users",
+    "keywords": [
+        "console",
+        "user-management"
+    ],
+    "license": "MIT",
+    "require": {
+        "symfony/console": "^4.2"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Src\\": "src/"
+        }
+    }
+}

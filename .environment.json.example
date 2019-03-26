@@ -1,0 +1,7 @@
+{
+    "dbDatabase":"cli_user_manager",
+    "dbHost":"127.0.0.1",
+    "dbPort":"5432",
+    "dbUser":"postgres",
+    "dbPassword":"password"
+}
