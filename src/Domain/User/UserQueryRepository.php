@@ -24,9 +24,12 @@ final class UserQueryRepository extends AbstractRepository
             email,
             name,
             created_at,
-            updated_at
+            updated_at,
+            deleted_at
           FROM
             users
+          WHERE
+            deleted_at IS NULL
 SQL;
 
         $query = $this->db->prepare($sqlStatement);
@@ -53,7 +56,8 @@ SQL;
             email,
             name,
             created_at,
-            updated_at
+            updated_at,
+            deleted_at
           FROM
             users
           WHERE

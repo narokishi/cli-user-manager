@@ -5,33 +5,34 @@ namespace Src\Command\User;
 
 use Src\DependencyInjection\InjectableInterface;
 use Src\DependencyInjection\InjectableTrait;
+use Src\Domain\User\DTO\UserDTO;
 use Src\Domain\User\UserService;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class CreateCommand
- * @package Src\Command
+ * Class DeleteCommand
+ * @package Src\Command\User
  */
-final class CreateCommand extends Command implements InjectableInterface
+final class DeleteCommand extends Command implements InjectableInterface
 {
     use InjectableTrait;
 
     /**
      * @var string
      */
-    protected static $defaultName = 'user:create';
+    protected static $defaultName = 'user:delete';
 
     /**
      * Configure command's attributes.
      */
     protected function configure()
     {
-        $this->setDescription('Dodawanie użytkownika')
+        $this->setDescription('Usuwanie użytkownika')
             ->setDefinition($this->createDefinition())
             ->setHelp($this->createHelp());
     }
@@ -47,10 +48,7 @@ final class CreateCommand extends Command implements InjectableInterface
         $userService = $this->container->getService(UserService::class);
 
         try {
-            $userService->createUser(
-                $input->getArgument('email'),
-                $input->getOption('name')
-            );
+            $userService->deleteUser($input->getArgument('email'));
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
         }
@@ -65,7 +63,6 @@ final class CreateCommand extends Command implements InjectableInterface
     {
         return new InputDefinition([
             new InputArgument('email', InputArgument::REQUIRED, 'E-mail użytkownika'),
-            new InputOption('name', null, InputOption::VALUE_REQUIRED, 'Imię użytkownika'),
         ]);
     }
 
@@ -75,9 +72,9 @@ final class CreateCommand extends Command implements InjectableInterface
     protected function createHelp(): string
     {
         return <<<EOF
-Polecenie <info>%command.name%</info> tworzy nowego użytkownika w bazie danych.
+Polecenie <info>%command.name%</info> usuwa użytkownika z bazy danych.
 
-  <info>php %command.full_name% test@test.pl --name=Test</info>
+  <info>php %command.full_name% test@test.pl</info>
 EOF;
     }
 }

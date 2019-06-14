@@ -1,13 +1,9 @@
-#!/usr/bin/env php
 <?php
 declare(strict_types = 1);
 
 use Src\DependencyInjection\Container;
 
 require __DIR__.'/vendor/autoload.php';
-
-$stopwatch = new \Test\Stopwatch;
-$stopwatch->start();
 
 $container = new Container;
 $container->registerService(\PDO::class, function () {
@@ -29,6 +25,3 @@ $application = (new Src\Application)
 
 $application->setAutoExit(false);
 $application->run(new Src\ArgvInput());
-
-$stopwatch->stop();
-echo "Czas wykonania: {$stopwatch->getResult()} sekund";

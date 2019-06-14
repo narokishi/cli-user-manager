@@ -35,6 +35,11 @@ final class UserDTO
     protected $updatedAt;
 
     /**
+     * @var string|null
+     */
+    protected $deletedAt;
+
+    /**
      * UserDTO constructor.
      *
      * @param string $id
@@ -42,14 +47,22 @@ final class UserDTO
      * @param string $name
      * @param string $createdAt
      * @param string|null $updatedAt
+     * @param string|null $deletedAt
      */
-    public function __construct(string $id, string $email, string $name, string $createdAt, ?string $updatedAt)
-    {
+    public function __construct(
+        string $id,
+        string $email,
+        string $name,
+        string $createdAt,
+        ?string $updatedAt,
+        ?string $deletedAt
+    ) {
         $this->id = $id;
         $this->email = $email;
         $this->name = $name;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+        $this->deletedAt = $deletedAt;
     }
 
     /**
@@ -63,7 +76,8 @@ final class UserDTO
             $user['email'],
             $user['name'],
             $user['created_at'],
-            $user['updated_at']
+            $user['updated_at'],
+            $user['deleted_at']
         );
     }
 
@@ -105,6 +119,14 @@ final class UserDTO
     public function getUpdatedAt(): ?string
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDeletedAt(): ?string
+    {
+        return $this->deletedAt;
     }
 
     /**

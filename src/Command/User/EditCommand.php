@@ -3,6 +3,9 @@ declare(strict_types = 1);
 
 namespace Src\Command\User;
 
+use Src\DependencyInjection\InjectableInterface;
+use Src\DependencyInjection\InjectableTrait;
+use Src\Domain\User\UserService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -14,8 +17,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class EditCommand
  * @package Src\Command
  */
-final class EditCommand extends Command
+final class EditCommand extends Command implements InjectableInterface
 {
+    use InjectableTrait;
+
     /**
      * @var string
      */
@@ -38,6 +43,18 @@ final class EditCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var UserService $userService */
+        $userService = $this->container->getService(UserService::class);
+
+        try {
+            $userService->editUser(
+                $input->getArgument('email'),
+                $input->getOption('name')
+            );
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
+        }
+
         return 0;
     }
 

@@ -52,6 +52,7 @@ final class Application extends BaseApplication
             new Command\User\ListCommand,
             new Command\User\EditCommand,
             new Command\User\GetCommand,
+            new Command\User\DeleteCommand,
         ]);
 
         return $this;
