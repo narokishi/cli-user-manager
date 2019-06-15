@@ -52,7 +52,7 @@ final class CreateCommand extends Command implements InjectableInterface
                 $input->getOption('name')
             );
         } catch (\Exception $e) {
-            $output->writeln($e->getMessage());
+            $output->writeln("<error>{$e->getMessage()}</error>");
 
             return 500;
         }

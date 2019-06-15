@@ -50,7 +50,7 @@ final class DeleteCommand extends Command implements InjectableInterface
         try {
             $userService->deleteUser($input->getArgument('email'));
         } catch (\Exception $e) {
-            $output->writeln($e->getMessage());
+            $output->writeln("<error>{$e->getMessage()}</error>");
 
             return 500;
         }
