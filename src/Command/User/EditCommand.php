@@ -53,6 +53,8 @@ final class EditCommand extends Command implements InjectableInterface
             );
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
+
+            return 500;
         }
 
         return 0;

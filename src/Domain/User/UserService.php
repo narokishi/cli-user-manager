@@ -7,8 +7,9 @@ use Src\Domain\Common\ParameterBag\FrozenParameterBag;
 use Src\Domain\User\DTO\UserDTO;
 
 /**
- * Class UserService
+ * Serwis domenowy do zarządzania użytkownikami.
  *
+ * Class UserService
  * @package Src\Domain\User
  */
 final class UserService
@@ -35,6 +36,8 @@ final class UserService
     }
 
     /**
+     * Wyciągnięcie listy wszystkich nieusuniętych użytkowników.
+     *
      * @return FrozenParameterBag
      */
     public function getUsers(): FrozenParameterBag
@@ -43,6 +46,8 @@ final class UserService
     }
 
     /**
+     * Wyciągnięcie danych użytkownika po emailu.
+     *
      * @param string $email
      * @return DTO\UserDTO|null
      */
@@ -52,6 +57,8 @@ final class UserService
     }
 
     /**
+     * Usunięcie użytkownika po emailu.
+     *
      * @param string $email
      * @return bool
      * @throws \Exception
@@ -61,14 +68,14 @@ final class UserService
         $user = $this->getUserByEmail($email);
 
         if (!$user instanceof UserDTO) {
-            throw new \Exception(
+            throw new \InvalidArgumentException(
                 "Użytkownik ($email) nie istnieje."
             );
         }
 
         if ($user->getDeletedAt()) {
-            throw new \Exception(
-                "Użytkownik ($email) jest już usunięty."
+            throw new \LogicException(
+                "Użytkownik ($email) jest już usunięty. Nie można go usunąć."
             );
         }
 
@@ -76,6 +83,8 @@ final class UserService
     }
 
     /**
+     * Stworzenie nowego użytkownika.
+     *
      * @param string $email
      * @param string $name
      * @return bool
@@ -86,7 +95,7 @@ final class UserService
         $user = $this->getUserByEmail($email);
 
         if ($user instanceof UserDTO) {
-            throw new \Exception(
+            throw new \LogicException(
                 "Użytkownik ($email) już istnieje."
             );
         }
@@ -95,6 +104,8 @@ final class UserService
     }
 
     /**
+     * Edytowanie danych istniejącego użytkownika.
+     *
      * @param string $email
      * @param string $name
      * @return bool
@@ -105,8 +116,14 @@ final class UserService
         $user = $this->getUserByEmail($email);
 
         if (!$user instanceof UserDTO) {
-            throw new \Exception(
+            throw new \InvalidArgumentException(
                 "Użytkownik ($email) nie istnieje."
+            );
+        }
+
+        if ($user->getDeletedAt()) {
+            throw new \LogicException(
+                "Użytkownik ($email) jest usunięty. Nie można go edytować."
             );
         }
 

@@ -49,10 +49,9 @@ final class GetCommand extends Command implements InjectableInterface
 
         $table = (new Table($output))
             ->setHeaderTitle('Użytkownik')
-            ->setFooterTitle('')
-            ->setHeaders(['Id', 'Email', 'Imię', 'Data utworzenia', 'Data modyfikacji'])
+            ->setHeaders(['Id', 'Email', 'Imię', 'Data utworzenia', 'Data modyfikacji', 'Data usunięcia'])
             ->setRows([
-                $user->toArray(),
+                $user->toArray(true),
             ]);
 
         $table->render();

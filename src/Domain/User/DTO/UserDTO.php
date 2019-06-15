@@ -130,16 +130,21 @@ final class UserDTO
     }
 
     /**
+     * @param bool $withDeleted
      * @return array
      */
-    public function toArray(): array
+    public function toArray($withDeleted = false): array
     {
-        return [
+        $data = [
             $this->getId(),
             $this->getEmail(),
             $this->getName(),
             $this->getCreatedAt(),
             $this->getUpdatedAt(),
         ];
+
+        return !$withDeleted ? $data : array_merge($data, [
+            $this->getDeletedAt(),
+        ]);
     }
 }
